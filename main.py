@@ -2,11 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 
 city = 'gdansk'
-url = 'https://www.olx.pl/nieruchomosci/mieszkania/{}'.format(city)
+url = 'https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/{}'.format(city)
 
 response = requests.get(url)
 
 titles = []
+prices = []
 cards = None
 
 if response.status_code == 200:
@@ -15,7 +16,10 @@ if response.status_code == 200:
 
 for card in cards:
   title = card.find('h6').text
+  price = card.find('p').text
+  price = int(''.join(price[:price.index('z')].split()))
   titles.append(title)
+  prices.append(price)
 
-print(len(titles))
-
+print(sum(prices) / len(prices))
+  
